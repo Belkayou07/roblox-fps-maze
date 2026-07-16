@@ -1,2 +1,5 @@
--- Client entry point.
--- Gameplay code will be added later.
+local MovementController = require(script.movement.MovementController)
+local FootstepController = require(script.audio.FootstepController)
+
+MovementController.start()
+FootstepController.start()
