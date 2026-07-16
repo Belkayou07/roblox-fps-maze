@@ -32,9 +32,16 @@ local function removeCharacter(character)
 		return
 	end
 
-	controller.Connection:Disconnect()
+	controller.HeartbeatConnection:Disconnect()
+	controller.ChildAddedConnection:Disconnect()
 	controller.Sound:Destroy()
 	activeCharacters[character] = nil
+end
+
+local function muteDefaultRunningSound(instance)
+	if instance:IsA("Sound") and instance.Name == "Running" then
+		instance.Volume = 0
+	end
 end
 
 local function addCharacter(character)
@@ -48,6 +55,11 @@ local function addCharacter(character)
 		return
 	end
 
+	for _, child in rootPart:GetChildren() do
+		muteDefaultRunningSound(child)
+	end
+	local childAddedConnection = rootPart.ChildAdded:Connect(muteDefaultRunningSound)
+
 	local sound = Instance.new("Sound")
 	sound.Name = "TacticalFootsteps"
 	sound.SoundId = MovementConfig.Footsteps.SoundId
@@ -58,8 +70,8 @@ local function addCharacter(character)
 	sound.Volume = 0
 	sound.Parent = rootPart
 
-	local connection
-	connection = RunService.Heartbeat:Connect(function()
+	local heartbeatConnection
+	heartbeatConnection = RunService.Heartbeat:Connect(function()
 		if not character.Parent or humanoid.Health <= 0 then
 			removeCharacter(character)
 			return
@@ -84,7 +96,8 @@ local function addCharacter(character)
 	end)
 
 	activeCharacters[character] = {
-		Connection = connection,
+		HeartbeatConnection = heartbeatConnection,
+		ChildAddedConnection = childAddedConnection,
 		Sound = sound,
 	}
 end
