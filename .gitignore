@@ -1,0 +1,13 @@
+# Roblox Studio files
+*.rbxl
+*.rbxlx
+*.rbxm
+*.rbxmx
+
+# Rojo build output
+build/
+
+# Editor and operating system files
+.vscode/
+.DS_Store
+Thumbs.db
