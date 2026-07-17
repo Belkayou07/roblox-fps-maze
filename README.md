@@ -17,6 +17,7 @@ Implemented prototype systems:
 - proximity text affected by distance, walls, fading, and muffled gibberish
 - automatically equipped prototype sidearm
 - server raycast hit detection, ammo, reloads, damage, and headshots
+- temporary NPC detection, aiming, line-of-sight checks, inaccurate firing, and player damage
 - no respawns during the active round
 - basic last-survivor result message
 
@@ -47,9 +48,10 @@ Controller and temporary touch actions are also bound for prototype testing.
 
 ## Prototype limitations
 
-- The sidearm model is only a generated block placeholder.
-- The firing sound, tracer, hit marker, and HUD are temporary testing effects.
-- The test NPC can be damaged but does not fight back.
+- The sidearm and NPC weapon models are generated block placeholders.
+- Gunshots are currently silent until a suitable firearm sound is added.
+- The tracer, hit marker, and HUD are temporary testing effects.
+- The NPC combat behavior is only for solo testing and does not use advanced searching, cover, hearing, or tactical decision-making.
 - A finished round does not yet regenerate the map or start another round.
 - Footsteps currently use one placeholder built-in sound for every surface.
 - Crouching lowers the camera and movement speed but does not yet resize the character collision body.
