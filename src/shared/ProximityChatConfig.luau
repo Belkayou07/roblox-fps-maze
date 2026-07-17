@@ -3,7 +3,11 @@
 return {
 	MaximumDistance = 55,
 	FullClarityDistance = 12,
-	OccludedVisibility = 0.06,
+
+	-- Walls reduce opacity and readability separately. This keeps obstructed
+	-- speech faintly present while making the actual words hard to understand.
+	OccludedVisibility = 0.3,
+	OccludedClarity = 0.1,
 	UpdateInterval = 0.05,
 	VisibilityResponsiveness = 10,
 
@@ -12,6 +16,11 @@ return {
 	MaximumHoldTime = 7.5,
 	FadeOutTime = 2.5,
 	SecondsPerCharacter = 0.055,
+
+	ClaritySteps = 12,
+	FullTextClarity = 0.85,
+	PartialWordThreshold = 0.3,
+	ReadableWordExponent = 1.35,
 
 	BillboardWidth = 300,
 	BillboardHeight = 82,
