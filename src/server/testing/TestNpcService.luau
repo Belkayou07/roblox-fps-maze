@@ -5,7 +5,7 @@ local Workspace = game:GetService("Workspace")
 
 local MovementConfig = require(ReplicatedStorage.Shared.MovementConfig)
 local TestNpcConfig = require(ReplicatedStorage.Shared.TestNpcConfig)
-local TestNpcCombat = require(script.TestNpcCombat)
+local TestNpcCombat = require(script.Parent.TestNpcCombat)
 
 local TestNpcService = {}
 local started = false
