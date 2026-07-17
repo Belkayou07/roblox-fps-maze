@@ -20,6 +20,27 @@ return {
 		WaypointSpacing = 4,
 	},
 
+	Combat = {
+		Enabled = true,
+		DetectionRange = 78,
+		FireRange = 68,
+		ScanInterval = 0.12,
+		LoseTargetAfter = 2.25,
+
+		MinimumReactionTime = 0.55,
+		MaximumReactionTime = 1.0,
+		MinimumShotInterval = 0.85,
+		MaximumShotInterval = 1.25,
+
+		Damage = 18,
+		HeadshotMultiplier = 1.4,
+		AimSpreadDegrees = 5.5,
+
+		WeaponPropSize = Vector3.new(0.35, 0.55, 1.25),
+		WeaponPropColor = Color3.fromRGB(52, 53, 56),
+		WeaponGrip = CFrame.new(0, -0.2, -0.7) * CFrame.Angles(0, math.rad(180), 0),
+	},
+
 	Speech = {
 		Enabled = true,
 		MinimumDelay = 8,
