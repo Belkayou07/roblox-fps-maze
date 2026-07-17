@@ -5,6 +5,7 @@ local Workspace = game:GetService("Workspace")
 
 local MovementConfig = require(ReplicatedStorage.Shared.MovementConfig)
 local TestNpcConfig = require(ReplicatedStorage.Shared.TestNpcConfig)
+local TestNpcCombat = require(script.TestNpcCombat)
 
 local TestNpcService = {}
 local started = false
@@ -42,6 +43,7 @@ local function createNpc(): Model?
 	npc.Name = TestNpcConfig.Name
 	npc:SetAttribute("IsTestNpc", true)
 	npc:SetAttribute("MovementState", "Walk")
+	npc:SetAttribute("CombatEngaged", false)
 
 	local humanoid = npc:FindFirstChildOfClass("Humanoid")
 	if humanoid then
@@ -139,7 +141,7 @@ end
 
 local function followPath(npc: Model, humanoid: Humanoid, destination: Vector3): boolean
 	local rootPart = npc:FindFirstChild("HumanoidRootPart")
-	if not rootPart or not rootPart:IsA("BasePart") then
+	if not rootPart or not rootPart:IsA("BasePart") or npc:GetAttribute("CombatEngaged") then
 		return false
 	end
 
@@ -152,7 +154,7 @@ local function followPath(npc: Model, humanoid: Humanoid, destination: Vector3):
 	end
 
 	for _, waypoint in path:GetWaypoints() do
-		if not npc.Parent or humanoid.Health <= 0 then
+		if not npc.Parent or humanoid.Health <= 0 or npc:GetAttribute("CombatEngaged") then
 			return false
 		end
 
@@ -182,6 +184,16 @@ local function runSpeech(npc: Model, humanoid: Humanoid, remote: RemoteEvent, ra
 			remote:FireAllClients(npc, line)
 		end
 	end)
+end
+
+local function waitForPause(npc: Model, humanoid: Humanoid, duration: number)
+	local finishAt = os.clock() + duration
+	while npc.Parent and humanoid.Health > 0 and os.clock() < finishAt do
+		if npc:GetAttribute("CombatEngaged") then
+			return
+		end
+		task.wait(0.1)
+	end
 end
 
 function TestNpcService.start()
@@ -228,8 +240,17 @@ function TestNpcService.start()
 		local remote = getRemote()
 		addFootsteps(npc, humanoid, rootPart)
 		runSpeech(npc, humanoid, remote, random)
+		TestNpcCombat.start(npc, humanoid, rootPart)
 
 		while npc.Parent and humanoid.Health > 0 do
+			if npc:GetAttribute("CombatEngaged") then
+				npc:SetAttribute("MovementState", "Walk")
+				humanoid.HipHeight = baseHipHeight
+				humanoid.WalkSpeed = 0
+				task.wait(0.1)
+				continue
+			end
+
 			destinations = getDestinationParts()
 			if #destinations == 0 then
 				break
@@ -239,8 +260,18 @@ function TestNpcService.start()
 			applyState(npc, humanoid, state, baseHipHeight)
 			local destination = destinations[random:NextInteger(1, #destinations)]
 			followPath(npc, humanoid, destination.Position)
+
+			if npc:GetAttribute("CombatEngaged") then
+				humanoid.WalkSpeed = 0
+				continue
+			end
+
 			applyState(npc, humanoid, "Walk", baseHipHeight)
-			task.wait(random:NextNumber(TestNpcConfig.MinimumPause, TestNpcConfig.MaximumPause))
+			waitForPause(
+				npc,
+				humanoid,
+				random:NextNumber(TestNpcConfig.MinimumPause, TestNpcConfig.MaximumPause)
+			)
 		end
 	end)
 end
