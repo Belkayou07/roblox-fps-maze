@@ -130,6 +130,10 @@ local function addFootsteps(npc: Model, humanoid: Humanoid, rootPart: BasePart)
 
 			task.wait(0.08)
 		end
+
+		if sound.IsPlaying then
+			sound:Stop()
+		end
 	end)
 end
 
@@ -161,15 +165,15 @@ local function followPath(npc: Model, humanoid: Humanoid, destination: Vector3):
 	return true
 end
 
-local function runSpeech(npc: Model, remote: RemoteEvent, random: Random)
+local function runSpeech(npc: Model, humanoid: Humanoid, remote: RemoteEvent, random: Random)
 	if not TestNpcConfig.Speech.Enabled then
 		return
 	end
 
 	task.spawn(function()
-		while npc.Parent do
+		while npc.Parent and humanoid.Health > 0 do
 			task.wait(random:NextNumber(TestNpcConfig.Speech.MinimumDelay, TestNpcConfig.Speech.MaximumDelay))
-			if not npc.Parent then
+			if not npc.Parent or humanoid.Health <= 0 then
 				break
 			end
 
@@ -223,7 +227,7 @@ function TestNpcService.start()
 		local baseHipHeight = humanoid.HipHeight
 		local remote = getRemote()
 		addFootsteps(npc, humanoid, rootPart)
-		runSpeech(npc, remote, random)
+		runSpeech(npc, humanoid, remote, random)
 
 		while npc.Parent and humanoid.Health > 0 do
 			destinations = getDestinationParts()
