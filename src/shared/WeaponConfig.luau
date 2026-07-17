@@ -26,9 +26,12 @@ return {
 	Effects = {
 		TracerLifetime = 0.07,
 		ImpactLifetime = 0.12,
+
+		-- The old built-in rocket sound was misleading and has been muted.
+		-- A proper firearm recording will be added during the audio pass.
 		ShotSoundId = "rbxasset://sounds/Rocket shot.wav",
-		ShotSoundVolume = 0.32,
-		ShotSoundPlaybackSpeed = 1.75,
+		ShotSoundVolume = 0,
+		ShotSoundPlaybackSpeed = 1,
 		ShotSoundMaxDistance = 120,
 	},
 }
