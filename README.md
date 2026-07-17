@@ -13,23 +13,29 @@ Implemented prototype systems:
 - tactical walking, sprinting, and crouching
 - jumping disabled
 - basic spatial footstep audio
-
-Weapons, rounds, elimination logic, polished maps, and final audio are not implemented yet.
+- temporary roaming NPC for solo testing
+- proximity text affected by distance, walls, fading, and muffled gibberish
+- automatically equipped prototype sidearm
+- server raycast hit detection, ammo, reloads, damage, and headshots
+- no respawns during the active round
+- basic last-survivor result message
 
 ## Controls
 
 - Move: standard Roblox movement controls
 - Sprint: hold `Left Shift`
 - Crouch: press `C` or `Left Control`
+- Fire: left mouse button
+- Reload: `R`
 - Jump: disabled
 
 Controller and temporary touch actions are also bound for prototype testing.
 
 ## Structure
 
-- `src/client` — camera, input, and client audio
-- `src/server` — map generation and server movement validation
-- `src/shared` — shared map and movement configuration
+- `src/client` — camera, input, HUD, proximity text, and client audio/effects
+- `src/server` — map generation, movement validation, combat validation, test NPC, and round tracking
+- `src/shared` — shared map, movement, chat, NPC, and weapon configuration
 - `default.project.json` — Rojo project mapping
 
 ## Syncing
@@ -41,7 +47,11 @@ Controller and temporary touch actions are also bound for prototype testing.
 
 ## Prototype limitations
 
+- The sidearm model is only a generated block placeholder.
+- The firing sound, tracer, hit marker, and HUD are temporary testing effects.
+- The test NPC can be damaged but does not fight back.
+- A finished round does not yet regenerate the map or start another round.
 - Footsteps currently use one placeholder built-in sound for every surface.
 - Crouching lowers the camera and movement speed but does not yet resize the character collision body.
-- Movement speed requests are validated by the server, but the prototype is not presented as exploit-proof.
+- Client requests are validated by the server, but the prototype is not presented as exploit-proof.
 - The apartment map uses plain blocks and is only intended for gameplay testing.
