@@ -112,7 +112,9 @@ local function createBillboard(speaker, text: string)
 	gui.Adornee = speakerHead
 	gui.Size = UDim2.fromOffset(ProximityChatConfig.BillboardWidth, ProximityChatConfig.BillboardHeight)
 	gui.StudsOffsetWorldSpace = Vector3.new(0, ProximityChatConfig.VerticalOffset, 0)
-	gui.AlwaysOnTop = false
+	-- Keep the text drawable through geometry. The raycast system below controls
+	-- how faint and unreadable it becomes when a wall blocks the speaker.
+	gui.AlwaysOnTop = true
 	gui.LightInfluence = 0
 	gui.MaxDistance = ProximityChatConfig.MaximumDistance
 	gui.Parent = player:WaitForChild("PlayerGui")
